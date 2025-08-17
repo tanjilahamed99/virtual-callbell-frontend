@@ -11,6 +11,7 @@ import {
   Laugh,
   Heart,
 } from "lucide-react"; // nice clean icons
+import { BASE_URL } from "@/config/constant";
 
 export default function RoomPage() {
   const remoteContainerRef = useRef(null);

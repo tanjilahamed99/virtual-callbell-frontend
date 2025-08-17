@@ -5,7 +5,6 @@ import { useGlobal } from "reactn";
 
 const Navbar = () => {
   const [user] = useGlobal("user");
-  console.log(user);
 
   return (
     <div className="navbar bg-base-100 shadow-sm">
@@ -75,14 +74,16 @@ const Navbar = () => {
         </ul>
       </div>
       <div className="navbar-end">
-        {user ? (
+        {user?.id ? (
           <>
             <h2>{user.name}</h2>
           </>
         ) : (
-          <Link href={"/login"} className="btn">
-            Login
-          </Link>
+          <div>
+            <Link href={"/login"} className="btn">
+              Login
+            </Link>
+          </div>
         )}
       </div>
     </div>
