@@ -1,12 +1,19 @@
 "use client";
 
+import login from "@/hooks/auth/login";
+import register from "@/hooks/auth/regsiter";
 import React, { useState } from "react";
+import setAuthToken from "@/config/setAuthToken";
+import { jwtDecode } from "jwt-decode";
+import { useGlobal } from "reactn";
 
 const Login = () => {
   const [signUp, setSignUp] = useState(false);
   const [userData, setUserData] = useState({});
-
-  console.log(userData);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState({ status: false, message: "" });
+  const setToken = useGlobal("token")[1];
+  const setUser = useGlobal("user")[1];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -17,50 +24,36 @@ const Login = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    //     e.preventDefault();
 
-    if (loading) return;
+    //     if (loading) return;
 
-    setLoading(true);
-    setError({ status: false, message: "" });
+    //     setLoading(true);
+    //     setError({ status: false, message: "" });
 
-    // const name = e.target.name.value;
-    // const email = e.target.email.value;
-    // const password = e.target.password.value;
-    const { name, email, password1, password2 } = userData || {};
+    //     const { name, email, password1, password2 } = userData || {};
 
-    if (password1 !== password2) {
-      setLoading(false);
-      return setError({
-        status: true,
-        type: "not-matched-pass",
-        message: "Password doesn't matched!",
-      });
-    }
+    //     if (password1 !== password2) {
+    //       setLoading(false);
+    //       return setError({
+    //         status: true,
+    //         type: "not-matched-pass",
+    //         message: "Password doesn't matched!",
+    //       });
+    //     }
 
     try {
-      const { data } = await axios.post(BASE_URL + "/auth/register", {
-        name,
-        password: password1,
-        email,
-        role,
-        provider: "email/pass",
-      });
-
-      const response = await signIn("credentials", {
-        email,
-        password: password1,
-        role,
-      });
-
-      if (!response?.error) {
-        redirect("/");
+      const { data } = await register({ ...userData });
+      if (data.success) {
+        const { data: user } = await login({
+          email: userData.email,
+          password: userData.password,
+        });
+        localStorage.setItem("token", user.token);
+        setAuthToken(user.token);
+        setUser(jwtDecode(user.token));
+        setToken(user.token);
       }
-
-      //   if (!response?.ok) {
-      //     throw new Error("Network response was not ok!");
-      //   }
-
       setLoading(false);
     } catch (err) {
       setLoading(false);
@@ -69,7 +62,7 @@ const Login = () => {
         setError({ status: true, message: err?.response?.data?.message });
       }
       console.log(err.message);
-      redirect("/signin");
+      //       redirect("/signin");
     }
   };
 
@@ -129,6 +122,7 @@ const Login = () => {
             </div>
             {/* button type will be submit for handling form submission*/}
             <button
+              onClick={handleSubmit}
               type="button"
               className="mx-auto block rounded-md border px-5 py-2 uppercase shadow-lg duration-200 hover:bg-zinc-400/10 dark:border-zinc-700 dark:hover:bg-zinc-700 dark:hover:text-white">
               Submit
@@ -137,9 +131,7 @@ const Login = () => {
               Already have an account?
               <button
                 type="button"
-                onClick={() => {
-                  setSignUp(!signUp);
-                }}
+                onClick={handleSubmit}
                 className="font-semibold underline">
                 Signin
               </button>
