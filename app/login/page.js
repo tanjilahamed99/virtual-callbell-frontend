@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import setAuthToken from "@/config/setAuthToken";
 import { jwtDecode } from "jwt-decode";
 import { useGlobal } from "reactn";
+import { useRouter } from "next/navigation";
 
 const Login = () => {
   const [signUp, setSignUp] = useState(false);
@@ -14,6 +15,8 @@ const Login = () => {
   const [error, setError] = useState({ status: false, message: "" });
   const setToken = useGlobal("token")[1];
   const setUser = useGlobal("user")[1];
+  const router = useRouter();
+  const [entryPath, setEntryPath] = useGlobal("entryPath");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,25 +26,27 @@ const Login = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    //     e.preventDefault();
+  const handleLogin = async (e) => {
+    try {
+      const { data: user } = await login({
+        email: userData.email,
+        password: userData.password,
+      });
+      localStorage.setItem("token", user.token);
+      localStorage.setItem("user", JSON.stringify(jwtDecode(user.token)));
+      setAuthToken(user.token);
+      setUser(jwtDecode(user.token));
+      setToken(user.token);
+      router.push("/");
+      await setEntryPath(null);
+      setLoading(false);
+    } catch (err) {
+      setLoading(false);
+      console.log(err.message);
+    }
+  };
 
-    //     if (loading) return;
-
-    //     setLoading(true);
-    //     setError({ status: false, message: "" });
-
-    //     const { name, email, password1, password2 } = userData || {};
-
-    //     if (password1 !== password2) {
-    //       setLoading(false);
-    //       return setError({
-    //         status: true,
-    //         type: "not-matched-pass",
-    //         message: "Password doesn't matched!",
-    //       });
-    //     }
-
+  const handleRegister = async (e) => {
     try {
       const { data } = await register({ ...userData });
       if (data.success) {
@@ -53,6 +58,7 @@ const Login = () => {
         setAuthToken(user.token);
         setUser(jwtDecode(user.token));
         setToken(user.token);
+        router.push("/");
       }
       setLoading(false);
     } catch (err) {
@@ -62,7 +68,6 @@ const Login = () => {
         setError({ status: true, message: err?.response?.data?.message });
       }
       console.log(err.message);
-      //       redirect("/signin");
     }
   };
 
@@ -122,17 +127,14 @@ const Login = () => {
             </div>
             {/* button type will be submit for handling form submission*/}
             <button
-              onClick={handleSubmit}
+              onClick={handleRegister}
               type="button"
               className="mx-auto block rounded-md border px-5 py-2 uppercase shadow-lg duration-200 hover:bg-zinc-400/10 dark:border-zinc-700 dark:hover:bg-zinc-700 dark:hover:text-white">
               Submit
             </button>
             <p className="text-center">
               Already have an account?
-              <button
-                type="button"
-                onClick={handleSubmit}
-                className="font-semibold underline">
+              <button type="button" className="font-semibold underline">
                 Signin
               </button>
             </p>
@@ -165,6 +167,7 @@ const Login = () => {
             </p>
             {/* button type will be submit for handling form submission*/}
             <button
+              onClick={handleLogin}
               type="button"
               className="mx-auto block rounded-md border px-5 py-2 uppercase shadow-lg duration-200 hover:bg-zinc-400/10 dark:border-zinc-700 dark:hover:bg-zinc-700 dark:hover:text-white">
               Submit
