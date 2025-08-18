@@ -1,10 +1,27 @@
 "use client";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { useGlobal } from "reactn";
+import Swal from "sweetalert2";
 
 const Navbar = () => {
-  const [user] = useGlobal("user");
+  const [user, setUser] = useGlobal("user");
+  const setToken = useGlobal("token")[1];
+  const router = useRouter();
+
+  const logout = async () => {
+    const { username } = user;
+    localStorage.removeItem("token");
+    await setToken(null);
+    await setUser({});
+    Swal.fire({
+      title: "Successful",
+      text: "You have logged out!",
+      icon: "success",
+    });
+    router.push("/");
+  };
 
   return (
     <div className="navbar bg-base-100 shadow-sm">
@@ -76,7 +93,9 @@ const Navbar = () => {
       <div className="navbar-end">
         {user?.id ? (
           <>
-            <h2>{user.name}</h2>
+            <button onClick={logout} className="btn">
+              Logout
+            </button>
           </>
         ) : (
           <div>
