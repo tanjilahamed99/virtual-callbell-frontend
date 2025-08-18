@@ -12,6 +12,8 @@ import {
   Heart,
 } from "lucide-react"; // nice clean icons
 import { BASE_URL } from "@/config/constant";
+import { useRouter } from "next/navigation";
+import socket from "@/utils/soket";
 
 export default function RoomPage() {
   const remoteContainerRef = useRef(null);
@@ -20,16 +22,19 @@ export default function RoomPage() {
   const [isMicOn, setIsMicOn] = useState(true);
   const [isCamOn, setIsCamOn] = useState(true);
   const [showReaction, setShowReaction] = useState(null);
+  const router = useRouter();
+  const [peerSocketId, setPeerSocketId] = useState(null);
 
   useEffect(() => {
     const joinRoom = async () => {
       const params = new URLSearchParams(window.location.search);
       const roomName = params.get("roomName");
       const username = params.get("username");
-
+      const peerSocketId = params.get("peerSocketId");
+      setPeerSocketId(peerSocketId);
       // Get token
       const res = await fetch(
-        `http://localhost:5000/get-token?roomName=${roomName}&username=${username}`
+        `${BASE_URL}/liveKit/get-token?roomName=${roomName}&username=${username}`
       );
       const { token } = await res.json();
 
@@ -64,6 +69,17 @@ export default function RoomPage() {
     joinRoom();
   }, []);
 
+  useEffect(() => {
+    // When someone ends the call
+    socket.on("end-call", () => {
+      router.push("/"); // redirect back to home (or show a modal)
+    });
+
+    return () => {
+      socket.off("end-call");
+    };
+  }, [router]);
+
   // Toggle mic (disable/enable actual track)
   const toggleMic = () => {
     if (!room) return;
@@ -88,8 +104,11 @@ export default function RoomPage() {
 
   // Leave room
   const leaveRoom = () => {
-    room?.disconnect();
-    window.location.href = "/";
+    // room?.disconnect();
+    // Assuming you stored the other peer's socketId in state as `peerSocketId`
+    socket.emit("end-call", { targetSocketId: peerSocketId });
+    // setPeerSocketId(null);
+    // router.push("/");
   };
 
   // Show reaction bubble
