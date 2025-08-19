@@ -11,11 +11,10 @@ export default function CallManager({
   userName = "Virtual-callbell-user",
 }) {
   const [incomingCall, setIncomingCall] = useState(null);
-  const [guestName, setGuestName] = useState("");
-  const [callTo, setCallTo] = useState("");
   const [waitingCall, setWaitingCall] = useState(false);
   const [user] = useGlobal("user");
   const router = useRouter();
+  const guestName = localStorage.getItem("guestName");
 
   useEffect(() => {
     socket.on("connect", () => {
@@ -67,17 +66,17 @@ export default function CallManager({
   }, [incomingCall]);
 
   const callRegisteredUser = useCallback(() => {
-    if (!callTo.trim()) return;
+    if (!userId.trim()) return;
 
-    const roomName = `call_guest_${callTo}_${Date.now()}`;
+    const roomName = `call_guest_${userId}_${Date.now()}`;
     setWaitingCall(true);
 
     socket.emit("guest-call", {
       from: guestName || "Guest",
-      to: callTo,
+      to: userId,
       roomName,
     });
-  }, [callTo, guestName]);
+  }, [userId, guestName]);
 
   const acceptCall = useCallback(() => {
     if (!incomingCall) return;
@@ -111,7 +110,7 @@ export default function CallManager({
           <div className="bg-white shadow-lg rounded-xl p-6 w-full max-w-sm text-center">
             <p className="text-lg font-semibold mb-4">
               📞 Incoming call from{" "}
-              {/* <span className="text-blue-600">{incomingCall.from.name}</span> */}
+              <span className="text-blue-600">{incomingCall.from.name}</span>
             </p>
             <div className="flex justify-center space-x-4">
               <button
@@ -134,7 +133,7 @@ export default function CallManager({
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white shadow-lg rounded-xl p-6 w-full max-w-sm text-center">
             <p className="text-lg font-semibold mb-4">
-              📞 Calling {callTo}… Waiting for them to pick up
+              📞 Calling {userId}… Waiting for them to pick up
             </p>
             <button
               onClick={() => setWaitingCall(false)}

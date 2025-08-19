@@ -33,7 +33,6 @@ const init = async () => {
           data: { id: decoded.id },
         });
         result = res.data;
-        console.log(res);
       } catch (e) {
         result = null;
       }

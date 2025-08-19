@@ -1,5 +1,7 @@
+import { CallProvider } from "@/provider/SoketProvider";
 import "./globals.css";
 import GlobalProvider from "@/provider/GlobalInit";
+import CallPopup from "@/components/CallPopUp/CallPopUp";
 
 export const metadata = {
   title: "Create Next App",
@@ -9,9 +11,13 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body
-        className={`antialiased`}>
-        <GlobalProvider>{children}</GlobalProvider>
+      <body className={`antialiased`}>
+        <GlobalProvider>
+          <CallProvider>
+            {children}
+            <CallPopup />
+          </CallProvider>
+        </GlobalProvider>
       </body>
     </html>
   );
