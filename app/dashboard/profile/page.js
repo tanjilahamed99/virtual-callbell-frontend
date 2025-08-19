@@ -183,9 +183,6 @@ const Profile = () => {
                 className="px-6 py-2 bg-indigo-600 text-white rounded-xl shadow hover:bg-indigo-700 transition">
                 Edit Profile
               </button>
-              <button className="px-6 py-2 bg-gray-200 text-gray-700 rounded-xl shadow hover:bg-gray-300 transition">
-                Logout
-              </button>
             </>
           )}
         </div>

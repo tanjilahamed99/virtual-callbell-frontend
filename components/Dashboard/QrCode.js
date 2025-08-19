@@ -43,7 +43,7 @@ const QrCode = ({ user = {} }) => {
       <div ref={qrRef}>
         <QRCodeCanvas value={qrValue} size={200} />
       </div>
-      <div className="flex space-x-4">
+      <div className="flex flex-col gap-2 items-center md:flex-row">
         <button
           onClick={handleDownload}
           className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">

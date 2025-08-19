@@ -1,11 +1,30 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React from "react";
+import { useGlobal } from "reactn";
+import Swal from "sweetalert2";
 
 const UserDashboardNavLinks = () => {
   const pathname = usePathname();
+  const [user, setUser] = useGlobal("user");
+  const setToken = useGlobal("token")[1];
+  const router = useRouter();
+
+  const logout = async () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    await setToken(null);
+    await setUser({});
+    Swal.fire({
+      title: "Successful",
+      text: "You have logged out!",
+      icon: "success",
+    });
+    router.push("/");
+  };
+
   const ulLinks = (
     <>
       <li
@@ -33,10 +52,9 @@ const UserDashboardNavLinks = () => {
         <Link href={"/dashboard/transactions"}>Transaction</Link>
       </li>
       <li
-        className={`hover:bg-indigo-600 ${
-          pathname === "/dashboard/logout" ? "bg-indigo-600" : ""
-        } px-3 py-2 rounded-lg cursor-pointer transition `}>
-        <Link href={"/dashboard/logout"}>Logout</Link>
+        onClick={logout}
+        className={`hover:bg-indigo-600  px-3 py-2 rounded-lg cursor-pointer transition`}>
+        Logout
       </li>
     </>
   );
