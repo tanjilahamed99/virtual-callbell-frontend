@@ -48,11 +48,10 @@ export const CallProvider = ({ children }) => {
     });
 
     socket.on("callCanceled", (data) => {
-      // Check if the canceled call matches the incoming call
-      // if (incomingCall && incomingCall.from.id === data.from) {
-      //   setModalOpen(false);
-      // }
-      console.log(data);
+      if (data.success) {
+        setModalOpen(false);
+        setIncomingCall(null);
+      }
     });
 
     return () => {

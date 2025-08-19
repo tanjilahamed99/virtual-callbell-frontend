@@ -10,7 +10,6 @@ export default function CallManager({
   userId,
   userName = "Virtual-callbell-user",
 }) {
-  const [incomingCall, setIncomingCall] = useState(null);
   const [waitingCall, setWaitingCall] = useState(false);
   const [user] = useGlobal("user");
   const router = useRouter();
@@ -58,6 +57,7 @@ export default function CallManager({
 
   const handleCloseCall = useCallback(() => {
     socket.emit("callCanceled", { userId });
+    setWaitingCall(false);
   }, [userId]);
 
   return (
