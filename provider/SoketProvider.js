@@ -34,6 +34,7 @@ export const CallProvider = ({ children }) => {
 
     socket.on("incoming-call", ({ from, roomName }) => {
       setIncomingCall({ from, roomName });
+      setModalOpen(true);
     });
 
     socket.on("call-accepted", ({ roomName, peerSocketId }) => {
@@ -46,16 +47,26 @@ export const CallProvider = ({ children }) => {
       alert("Your call was declined");
     });
 
+    socket.on("callCanceled", (data) => {
+      // Check if the canceled call matches the incoming call
+      // if (incomingCall && incomingCall.from.id === data.from) {
+      //   setModalOpen(false);
+      // }
+      console.log(data);
+    });
+
     return () => {
       socket.off("incoming-call");
       socket.off("call-accepted");
       socket.off("call-declined");
+      socket.off("callCanceled");
     };
-  }, [user, router]);
+  }, [user, router, incomingCall]);
 
   const declineCall = useCallback(() => {
     if (!incomingCall) return;
     socket.emit("call-declined", { guestSocketId: incomingCall.from.socketId });
+    setModalOpen(false);
     setIncomingCall(null);
   }, [incomingCall]);
 
@@ -65,6 +76,7 @@ export const CallProvider = ({ children }) => {
       roomName: incomingCall.roomName,
       guestSocketId: incomingCall.from.socketId,
     });
+    setModalOpen(false);
     router.push(
       `/room?roomName=${incomingCall.roomName}&username=${user.name}&peerSocketId=${incomingCall.from.socketId}`
     );
@@ -75,7 +87,6 @@ export const CallProvider = ({ children }) => {
     declineCall,
     acceptCall,
     modalOpen,
-    setModalOpen,
   };
   return <CallContext.Provider value={data}>{children}</CallContext.Provider>;
 };

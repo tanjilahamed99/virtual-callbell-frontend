@@ -17,18 +17,6 @@ export default function CallManager({
   const guestName = localStorage.getItem("guestName");
 
   useEffect(() => {
-    socket.on("connect", () => {
-      console.log("✅ Connected to socket server:", socket.id);
-    });
-
-    if (user) {
-      socket.emit("register", user?.id);
-    }
-
-    socket.on("incoming-call", ({ from, roomName }) => {
-      setIncomingCall({ from, roomName });
-    });
-
     socket.on("call-accepted", ({ roomName, peerSocketId }) => {
       setWaitingCall(false);
       router.push(
@@ -37,7 +25,6 @@ export default function CallManager({
         }&peerSocketId=${peerSocketId}`
       );
     });
-
     // 👇 Guest hears decline
     socket.on("call-declined", () => {
       Swal.fire({
@@ -46,6 +33,7 @@ export default function CallManager({
         text: "Your call was declined",
       });
       setWaitingCall(false); // hide waiting modal
+      router.push("/");
     });
 
     return () => {
@@ -54,16 +42,6 @@ export default function CallManager({
       socket.off("call-declined");
     };
   }, [guestName, user, router]);
-
-  const declineCall = useCallback(() => {
-    if (!incomingCall) return;
-
-    socket.emit("call-declined", {
-      guestSocketId: incomingCall.from.socketId,
-    });
-
-    setIncomingCall(null); // close popup for registered user
-  }, [incomingCall]);
 
   const callRegisteredUser = useCallback(() => {
     if (!userId.trim()) return;
@@ -78,18 +56,9 @@ export default function CallManager({
     });
   }, [userId, guestName]);
 
-  const acceptCall = useCallback(() => {
-    if (!incomingCall) return;
-
-    socket.emit("call-accepted", {
-      roomName: incomingCall.roomName,
-      guestSocketId: incomingCall.from.socketId,
-    });
-
-    router.push(
-      `/room?roomName=${incomingCall.roomName}&username=${user?.name}&peerSocketId=${incomingCall.from.socketId}`
-    );
-  }, [incomingCall, router, user]);
+  const handleCloseCall = useCallback(() => {
+    socket.emit("callCanceled", { userId });
+  }, [userId]);
 
   return (
     <div className="flex gap-5 items-center justify-center w-full">
@@ -104,39 +73,15 @@ export default function CallManager({
         Back
       </button>
 
-      {/* Incoming Call Modal */}
-      {incomingCall && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white shadow-lg rounded-xl p-6 w-full max-w-sm text-center">
-            <p className="text-lg font-semibold mb-4">
-              📞 Incoming call from{" "}
-              <span className="text-blue-600">{incomingCall.from.name}</span>
-            </p>
-            <div className="flex justify-center space-x-4">
-              <button
-                onClick={acceptCall}
-                className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">
-                Accept
-              </button>
-              <button
-                onClick={declineCall}
-                className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
-                Decline
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Waiting Modal */}
       {waitingCall && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white shadow-lg rounded-xl p-6 w-full max-w-sm text-center">
-            <p className="text-lg font-semibold mb-4">
-              📞 Calling {userId}… Waiting for them to pick up
+            <p className="text-lg font-semibold mb-4 text-black">
+              📞 Calling {userName}… Waiting for them to pick up
             </p>
             <button
-              onClick={() => setWaitingCall(false)}
+              onClick={handleCloseCall}
               className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
               Cancel Call
             </button>

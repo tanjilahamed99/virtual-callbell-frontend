@@ -28,7 +28,6 @@ const UserCard = () => {
     if (userID && userName) {
       const fetch = async () => {
         const { data } = await getUser({ id: userID });
-        console.log(data);
         if (data.success) {
           setUser(data.data);
           setLoading(false);
