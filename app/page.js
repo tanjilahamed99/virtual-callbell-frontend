@@ -1,102 +1,219 @@
-import Image from "next/image";
+import Footer from "@/components/Footer/Footer";
+import Navbar from "@/components/Navbar/Navbar";
+import GuestModal from "@/components/welcomeModal/WelcomeModal";
+import {
+  PhoneCall,
+  QrCode,
+  ShieldCheck,
+  Users,
+  Server,
+  Star,
+  FileText,
+} from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.js
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
+      {/* Navbar */}
+      <header className="w-full sticky top-0 z-50 shadow-md bg-white">
+        <Navbar />
+      </header>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      {/* Hero Section */}
+      <section className="flex-1 flex flex-col items-center justify-center px-6 py-24 bg-gradient-to-r from-indigo-50 to-blue-50 text-center">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 leading-tight">
+          Welcome to Virtual-Callbell
+        </h1>
+        <p className="mt-4 text-gray-600 text-lg sm:text-xl max-w-3xl">
+          Connect seamlessly, explore features, and enjoy a smooth, professional
+          experience.
+        </p>
+        <div className="mt-8">
+          <GuestModal />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+      </section>
+
+      {/* Features Section */}
+      <section className="px-6 py-24 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 text-center mb-12">
+            Key Features
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+            <div className="p-8 bg-gray-50 rounded-xl shadow-md hover:shadow-xl transition duration-300">
+              <PhoneCall className="mx-auto text-indigo-500 mb-4" size={48} />
+              <h3 className="text-xl font-semibold mb-2 text-gray-800 text-center">
+                Instant Calls
+              </h3>
+              <p className="text-gray-600 text-center">
+                Start a call with a single click, anytime and anywhere.
+              </p>
+            </div>
+            <div className="p-8 bg-gray-50 rounded-xl shadow-md hover:shadow-xl transition duration-300">
+              <QrCode className="mx-auto text-indigo-500 mb-4" size={48} />
+              <h3 className="text-xl font-semibold mb-2 text-gray-800 text-center">
+                QR Scanner Integration
+              </h3>
+              <p className="text-gray-600 text-center">
+                Scan codes to connect instantly with users or services.
+              </p>
+            </div>
+            <div className="p-8 bg-gray-50 rounded-xl shadow-md hover:shadow-xl transition duration-300">
+              <ShieldCheck className="mx-auto text-indigo-500 mb-4" size={48} />
+              <h3 className="text-xl font-semibold mb-2 text-gray-800 text-center">
+                Secure Connections
+              </h3>
+              <p className="text-gray-600 text-center">
+                End-to-end encrypted calls for complete privacy and safety.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Roles Section */}
+      <section className="px-6 py-24 bg-indigo-50">
+        <div className="max-w-7xl mx-auto text-center">
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-12">
+            Website Roles
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+            <div className="p-8 bg-white rounded-xl shadow-md hover:shadow-xl transition duration-300">
+              <Users className="mx-auto text-indigo-500 mb-4" size={48} />
+              <h3 className="text-xl font-semibold mb-2 text-gray-800">
+                Guest
+              </h3>
+              <p className="text-gray-600">
+                Explore features, scan QR codes, and initiate calls
+                effortlessly.
+              </p>
+            </div>
+            <div className="p-8 bg-white rounded-xl shadow-md hover:shadow-xl transition duration-300">
+              <Users className="mx-auto text-indigo-500 mb-4" size={48} />
+              <h3 className="text-xl font-semibold mb-2 text-gray-800">
+                Registered User
+              </h3>
+              <p className="text-gray-600">
+                Access dashboard, receive calls, and manage notifications.
+              </p>
+            </div>
+            <div className="p-8 bg-white rounded-xl shadow-md hover:shadow-xl transition duration-300">
+              <Users className="mx-auto text-indigo-500 mb-4" size={48} />
+              <h3 className="text-xl font-semibold mb-2 text-gray-800">
+                Admin
+              </h3>
+              <p className="text-gray-600">
+                Manage users, monitor activity, and control system settings.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works Section */}
+      <section className="px-6 py-24 bg-white">
+        <div className="max-w-7xl mx-auto text-center">
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-12">
+            How It Works
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-10">
+            <div className="p-8 bg-white rounded-xl shadow-md hover:shadow-xl transition duration-300">
+              <FileText className="mx-auto text-indigo-500 mb-4" size={48} />
+              <h3 className="text-xl font-semibold mb-2 text-gray-800">
+                Step 1: Register
+              </h3>
+              <p className="text-gray-600">
+                Create an account and verify your details quickly and easily.
+              </p>
+            </div>
+            <div className="p-8 bg-white rounded-xl shadow-md hover:shadow-xl transition duration-300">
+              <QrCode className="mx-auto text-indigo-500 mb-4" size={48} />
+              <h3 className="text-xl font-semibold mb-2 text-gray-800">
+                Step 2: Scan or Invite
+              </h3>
+              <p className="text-gray-600">
+                Scan QR codes or invite users to start instant communication.
+              </p>
+            </div>
+            <div className="p-8 bg-white rounded-xl shadow-md hover:shadow-xl transition duration-300">
+              <PhoneCall className="mx-auto text-indigo-500 mb-4" size={48} />
+              <h3 className="text-xl font-semibold mb-2 text-gray-800">
+                Step 3: Connect
+              </h3>
+              <p className="text-gray-600">
+                Start secure calls with crystal-clear quality and ease of use.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* System Section */}
+      <section className="px-6 py-24 bg-indigo-50">
+        <div className="max-w-4xl mx-auto text-center">
+          <Server className="mx-auto text-indigo-500 mb-6" size={48} />
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+            Our System
+          </h2>
+          <p className="text-gray-600 text-lg sm:text-xl">
+            Robust, secure, and scalable platform supporting real-time
+            communication, QR scanning, and dashboard management.
+          </p>
+        </div>
+      </section>
+
+      {/* Call to Action Section */}
+      <section className="px-6 py-24 bg-indigo-600 text-white text-center">
+        <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+          Ready to Experience Seamless Calls?
+        </h2>
+        <p className="text-lg sm:text-xl mb-8 max-w-2xl mx-auto">
+          Join Virtual-Callbell today and enjoy professional, instant, and
+          secure calling features.
+        </p>
+        <div className="flex justify-center gap-4">
+          <GuestModal />
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="px-6 py-24 bg-white">
+        <div className="max-w-7xl mx-auto text-center">
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-12">
+            What Our Users Say
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+            <div className="p-8 bg-gray-50 rounded-xl shadow-md hover:shadow-xl transition duration-300">
+              <Star className="mx-auto text-indigo-500 mb-4" size={48} />
+              <p className="text-gray-600 mb-4">
+                “The platform is super easy to use, and QR scanning makes
+                communication instant!”
+              </p>
+              <h4 className="text-gray-800 font-semibold">Jane Doe</h4>
+            </div>
+            <div className="p-8 bg-gray-50 rounded-xl shadow-md hover:shadow-xl transition duration-300">
+              <Star className="mx-auto text-indigo-500 mb-4" size={48} />
+              <p className="text-gray-600 mb-4">
+                “Secure calls and fast connections make my work life easier
+                every day.”
+              </p>
+              <h4 className="text-gray-800 font-semibold">John Smith</h4>
+            </div>
+            <div className="p-8 bg-gray-50 rounded-xl shadow-md hover:shadow-xl transition duration-300">
+              <Star className="mx-auto text-indigo-500 mb-4" size={48} />
+              <p className="text-gray-600 mb-4">
+                “Professional and intuitive. I can connect with clients without
+                any hassle.”
+              </p>
+              <h4 className="text-gray-800 font-semibold">Alice Lee</h4>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="w-full mt-auto">
+        <Footer />
       </footer>
     </div>
   );
