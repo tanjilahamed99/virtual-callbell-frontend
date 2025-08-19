@@ -6,7 +6,10 @@ import { useGlobal } from "reactn";
 import socket from "@/utils/soket";
 import Swal from "sweetalert2";
 
-export default function CallManager({}) {
+export default function CallManager({
+  userId,
+  userName = "Virtual-callbell-user",
+}) {
   const [incomingCall, setIncomingCall] = useState(null);
   const [guestName, setGuestName] = useState("");
   const [callTo, setCallTo] = useState("");
@@ -30,7 +33,9 @@ export default function CallManager({}) {
     socket.on("call-accepted", ({ roomName, peerSocketId }) => {
       setWaitingCall(false);
       router.push(
-        `/room?roomName=${roomName}&username=${guestName || "Guest"}&peerSocketId=${peerSocketId}`
+        `/room?roomName=${roomName}&username=${
+          guestName || "Guest"
+        }&peerSocketId=${peerSocketId}`
       );
     });
 
@@ -88,43 +93,17 @@ export default function CallManager({}) {
   }, [incomingCall, router, user]);
 
   return (
-    <div className="flex items-center justify-center w-full">
-      {user?.id ? (
-        /* Registered User */
-        <div className="w-full max-w-lg bg-white shadow-lg rounded-xl p-6 text-center">
-          <h2 className="text-xl font-semibold mb-4">
-            Welcome, {user.name} 👋
-          </h2>
-          <p className="text-gray-500">You are online and waiting for calls…</p>
-        </div>
-      ) : (
-        /* Guest */
-        <div className="bg-white shadow-lg rounded-xl p-6 w-full max-w-sm">
-          <h1 className="text-2xl font-bold text-center mb-4">Guest Call</h1>
-
-          <input
-            type="text"
-            placeholder="Your Name (Guest)"
-            value={guestName}
-            onChange={(e) => setGuestName(e.target.value)}
-            className="w-full border rounded-lg p-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-
-          <input
-            type="text"
-            placeholder="Enter Registered User's ID"
-            value={callTo}
-            onChange={(e) => setCallTo(e.target.value)}
-            className="w-full border rounded-lg p-2 mb-4 focus:outline-none focus:ring-2 focus:ring-green-500"
-          />
-
-          <button
-            onClick={callRegisteredUser}
-            className="w-full bg-green-600 text-white rounded-lg py-2 font-semibold hover:bg-green-700 transition">
-            📞 Call Registered User
-          </button>
-        </div>
-      )}
+    <div className="flex gap-5 items-center justify-center w-full">
+      <button
+        onClick={callRegisteredUser}
+        className="w-[70%] bg-green-600 text-white rounded-lg py-2 font-semibold hover:bg-green-700 transition">
+        📞 Call {userName}
+      </button>
+      <button
+        onClick={() => router.back()}
+        className="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg shadow hover:bg-gray-300 w-[30%]">
+        Back
+      </button>
 
       {/* Incoming Call Modal */}
       {incomingCall && (
