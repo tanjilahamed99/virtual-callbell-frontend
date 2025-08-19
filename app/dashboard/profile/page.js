@@ -163,7 +163,7 @@ const Profile = () => {
         </div>
 
         {/* Action Buttons */}
-        <div className="mt-10 flex justify-center gap-4">
+        <div className="mt-10 flex flex-col md:flex-row justify-center gap-4">
           {isEditing ? (
             <>
               <button
