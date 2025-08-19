@@ -4,8 +4,10 @@ import Image from "next/image";
 
 const plans = [
   {
+    _id: "32432424234",
     title: "Basic",
-    price: { monthly: 29, sixMonth: 150, yearly: 280 },
+    price: 100,
+    time: "monthly",
     features: [
       "Custom profile and more",
       "Limited emoji access",
@@ -15,8 +17,10 @@ const plans = [
       "https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL2pvYjk2OC1lbGVtZW50LTAxMi14LmpwZw.jpg",
   },
   {
+    _id: "324324242344534",
     title: "Advance",
-    price: { monthly: 99, sixMonth: 550, yearly: 1000 },
+    price: 300,
+    time: "6 months",
     features: [
       "Custom profile and more",
       "Custom emoji anywhere",
@@ -26,8 +30,10 @@ const plans = [
       "https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL2pvYjk2OC1lbGVtZW50LTAxMi14LmpwZw.jpg",
   },
   {
+    _id: "324324242344904850934534",
     title: "Pro",
-    price: { monthly: 199, sixMonth: 1050, yearly: 2000 },
+    price: 500,
+    time: "yearly",
     features: [
       "Unlimited profiles",
       "Custom emoji & GIFs",
@@ -67,7 +73,7 @@ const Subscriptions = () => {
                 width={60}
                 height={60}
                 className="h-[60px] w-[60px] rounded-full border bg-slate-100 object-cover p-2 duration-300 hover:scale-105"
-                src="https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL2pvYjk2OC1lbGVtZW50LTAxMi14LmpwZw.jpg"
+                src={plan.image}
                 alt="card navigate ui"
               />
               {/* Price Ribbon SVG  */}
@@ -117,9 +123,9 @@ const Subscriptions = () => {
                   <div className="absolute left-7 top-8 flex flex-col text-xl font-semibold text-white">
                     <span>
                       <sub className="text-sm font-normal">$</sub>
-                      <span>99</span>
+                      <span>{plan?.price}</span>
                     </span>
-                    <span className="text-xs font-normal">/month</span>
+                    <span className="text-xs font-normal">/{plan?.time}</span>
                   </div>
                 </div>
               </div>
@@ -132,7 +138,7 @@ const Subscriptions = () => {
                 Advance
               </h3>
               <ul className="space-y-3">
-                {listArray?.map((each, idx) => (
+                {plan?.features?.map((each, idx) => (
                   <li
                     key={idx}
                     className="flex items-center gap-2 text-sm font-semibold text-sky-900 dark:text-[#4BB3FF]">
@@ -163,7 +169,7 @@ const Subscriptions = () => {
               <div className="flex justify-center pt-4">
                 <button
                   onClick={() => Purchase(plan.id)}
-                  className="h-16 w-full rounded-full border-2 border-sky-300 font-black text-sky-800 duration-300 dark:text-[#6CC2FB]">
+                  className="h-16 w-full rounded-full border-2 border-sky-300 cursor-pointer font-black text-sky-800 duration-300 dark:text-[#6CC2FB]">
                   Purchases
                 </button>
               </div>
