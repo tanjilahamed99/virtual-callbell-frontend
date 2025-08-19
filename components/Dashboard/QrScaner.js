@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Html5Qrcode } from "html5-qrcode";
 import { useRouter } from "next/navigation";
+import { ScanLine, X } from "lucide-react";
 
 const QrScanner = () => {
   const [scannerOpen, setScannerOpen] = useState(false);
@@ -22,15 +23,10 @@ const QrScanner = () => {
         (decodedText) => {
           console.log("QR Code scanned:", decodedText);
 
-          html5QrCode
-            .stop()
-            .then(() => {
-              setScannerOpen(false);
+          html5QrCode.stop().catch(() => {}); // ignore stop errors here
 
-              // decodedText already contains query string (userId & name)
-              router.push(`/userInfo?${decodedText}`);
-            })
-            .catch((err) => console.error("Stop error:", err));
+          setScannerOpen(false);
+          router.push(`/userInfo?${decodedText}`);
         },
         (errorMessage) => {
           console.warn(errorMessage);
@@ -38,23 +34,48 @@ const QrScanner = () => {
       )
       .catch((err) => console.error(err));
 
-    return () => {};
+    return () => {
+      if (html5QrCodeRef.current && html5QrCodeRef.current.getState() === 2) {
+        // 2 = SCANNING state
+        html5QrCodeRef.current.stop().catch(() => {});
+      }
+    };
   }, [scannerOpen, router]);
 
-  const startScanner = () => setScannerOpen(true);
+  const closeScanner = async () => {
+    if (html5QrCodeRef.current) {
+      const state = html5QrCodeRef.current.getState();
+      if (state === 2) {
+        await html5QrCodeRef.current.stop().catch(() => {});
+      }
+    }
+    setScannerOpen(false);
+  };
 
   return (
     <div>
       {!scannerOpen && (
-        <button
-          onClick={startScanner}
-          className="px-4 py-2 bg-blue-600 text-white rounded"
-        >
-          Scan QR Code
-        </button>
+        <ScanLine
+          onClick={() => setScannerOpen(true)}
+          className="text-white cursor-pointer"
+        />
       )}
 
-      {scannerOpen && <div id="reader" style={{ width: "300px" }}></div>}
+      {scannerOpen && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+          <div className="relative">
+            <button
+              onClick={closeScanner}
+              className="absolute top-[-40px] right-0 bg-red-500 text-white rounded-full p-2 hover:bg-red-600 transition">
+              <X className="w-5 h-5" />
+            </button>
+
+            <div
+              id="reader"
+              className="w-[300px] h-[300px] bg-white rounded-lg shadow-lg"></div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
