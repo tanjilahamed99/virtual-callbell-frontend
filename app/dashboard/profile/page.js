@@ -5,6 +5,7 @@ import updateUser from "@/hooks/users/updateUser";
 import { useGlobal } from "reactn";
 import myData from "@/hooks/users/myData";
 import Swal from "sweetalert2";
+import QrCode from "@/components/Dashboard/QrCode";
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -98,7 +99,6 @@ const Profile = () => {
             />
           </div>
         </div>
-
         {/* myInfo Details */}
         <div className="mt-8 space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -161,7 +161,6 @@ const Profile = () => {
             </div>
           </div>
         </div>
-
         {/* Action Buttons */}
         <div className="mt-10 flex flex-col md:flex-row justify-center gap-4">
           {isEditing ? (
@@ -190,7 +189,10 @@ const Profile = () => {
             </>
           )}
         </div>
+        <QrCode user={user} />
       </div>
+
+      {/* qr code for call gest direct */}
     </div>
   );
 };
